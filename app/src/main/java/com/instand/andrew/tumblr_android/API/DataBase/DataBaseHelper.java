@@ -162,11 +162,7 @@ public class DataBaseHelper extends SQLiteOpenHelper implements IDataBase {
                 } else {
                     follower.setIsFollow(false);
                 }
-                if (cursor.getString(5).equals("1")) {
-                    follower.setIsDelete(true);
-                } else {
-                    follower.setIsDelete(false);
-                }
+                follower.setIsDelete(true);
                 follower.setId(cursor.getInt(0));
                 list.add(follower);
             } while (cursor.moveToNext());
@@ -181,9 +177,9 @@ public class DataBaseHelper extends SQLiteOpenHelper implements IDataBase {
             idFollowers += follower.getId() + ",";
         }
         idFollowers = idFollowers.substring(0, idFollowers.length() - 1);
-        System.out.println(idFollowers);
         String query = "UPDATE " + TABLE_FOLLOWER + " SET " + COLUMN_ISDELETE + "=1 WHERE " + COLUMN_ID + "in (" + idFollowers
                 + ") and " + COLUMN_ISDELETE + "=0;";
-        System.out.println(query);
+        SQLiteDatabase database = getWritableDatabase();
+        database.execSQL(query);
     }
 }

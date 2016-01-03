@@ -2,6 +2,7 @@ package com.instand.andrew.tumblr_android.API.BusinessLogic;
 
 import android.content.Context;
 
+import com.instand.andrew.tumblr_android.API.DataBase.DataBaseHelper;
 import com.instand.andrew.tumblr_android.API.Entity.Follower;
 import com.instand.andrew.tumblr_android.API.Entity.FollowerInMainList;
 import com.tumblr.jumblr.JumblrClient;
@@ -18,6 +19,7 @@ public class Followers_API {
     JumblrClient client = null;
     List<Blog> followingBlogs = null;
     Context context = null;
+    DataBaseHelper dataBase = new DataBaseHelper(context);
 
     public Followers_API(JumblrClient client, Context context) {
         this.client = client;
@@ -60,6 +62,7 @@ public class Followers_API {
             follower.setTitle(blog.getTitle());
             follower.setIsFollow(true);
             follower.setId(-1);
+            follower.setIsDelete(false);
             followers.add(follower);
         }
         return followers;
@@ -83,8 +86,11 @@ public class Followers_API {
     }
 
     public List<Follower> getFollowersByDB() {
-        List<Follower> list = new ArrayList<Follower>();
-        return list;
+        return dataBase.getFollowerWithOutDeleteUser();
+    }
+
+    public List<Follower> getAllFollowersByDB() {
+        return dataBase.getAllFollower();
     }
 
     public List<Follower> getDeleteFollowers() {
@@ -96,10 +102,26 @@ public class Followers_API {
     }
 
 
+    public List<Follower> getMainList() {
+        List<Follower> followingList = getFollowing();
+        List<Follower> followerList = getAllFollowersByDB();
+        return concatFollowerAndFollowers(followerList, followingList);
+    }
 
-    /*public List<FollowerInMainList> getMainList() {
-        List<FollowerInMainList> list = new ArrayList<FollowerInMainList>();
-        ArrayList<Follower> followersByTumblrAPI = get
-        return list;
-    }*/
+    public List<Follower> concatFollowerAndFollowers(List<Follower> followerList, List<Follower> followingList) {
+        List<Follower> concatList = new ArrayList<>();
+        List<Follower> currentList = followingList;
+        List<Follower> currentList1 = followingList;
+        List<Follower> currentList3 = followerList;
+        currentList.retainAll(followerList);
+        currentList1.removeAll(followerList);
+        for (Follower follower : currentList) {
+            follower.setIsFollow(true);
+        }
+        currentList3.removeAll(followingList);
+        concatList.addAll(currentList);
+        concatList.addAll(currentList1);
+        concatList.addAll(currentList3);
+        return concatList;
+    }
 }
