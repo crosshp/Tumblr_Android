@@ -1,5 +1,7 @@
 package com.instand.andrew.tumblr_android.API.BusinessLogic;
 
+import android.content.Context;
+
 import com.instand.andrew.tumblr_android.API.Entity.Follower;
 import com.tumblr.jumblr.JumblrClient;
 import com.tumblr.jumblr.types.Blog;
@@ -14,13 +16,15 @@ import java.util.List;
 public class Tumblr_API {
     private String token1 = null;
     private String token2 = null;
+    private Context context = null;
     Followers_API followers_api = null;
 
-    public Tumblr_API(String token1, String token2) {
+    public Tumblr_API(String token1, String token2, Context context) {
         this.token1 = token1;
         this.token2 = token2;
+        this.context = context;
         initializeClient();
-        followers_api = new Followers_API(client);
+        followers_api = new Followers_API(client, context);
 
     }
 
@@ -65,15 +69,7 @@ public class Tumblr_API {
     }
 
 
-    public void getNumberOfComments() {
-    }
-
-
     public void getUserWhoMostLikesList() {
-    }
-
-
-    public void getUserWhoMostCommentsList() {
     }
 
 
@@ -103,10 +99,5 @@ public class Tumblr_API {
 
     public void getListFollowerWhichUserMostLiked() {
     }
-
-
-    public void getListFollowerWhichUserMostComments() {
-    }
-
 
 }

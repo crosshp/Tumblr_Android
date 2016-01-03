@@ -1,6 +1,9 @@
 package com.instand.andrew.tumblr_android.API.BusinessLogic;
 
+import android.content.Context;
+
 import com.instand.andrew.tumblr_android.API.Entity.Follower;
+import com.instand.andrew.tumblr_android.API.Entity.FollowerInMainList;
 import com.tumblr.jumblr.JumblrClient;
 import com.tumblr.jumblr.types.Blog;
 import com.tumblr.jumblr.types.User;
@@ -14,9 +17,11 @@ import java.util.List;
 public class Followers_API {
     JumblrClient client = null;
     List<Blog> followingBlogs = null;
+    Context context = null;
 
-    public Followers_API(JumblrClient client) {
+    public Followers_API(JumblrClient client, Context context) {
         this.client = client;
+        this.context = context;
         initializeData();
     }
 
@@ -68,4 +73,33 @@ public class Followers_API {
         }
         return false;
     }
+
+    public List<Follower> getNewFollowers() {
+        List<Follower> followersByTumblrApi = getFollowersByTumblrApi();
+        List<Follower> followersByDB = getFollowersByDB();
+        List<Follower> newFollowers = followersByTumblrApi;
+        newFollowers.removeAll(followersByTumblrApi);
+        return newFollowers;
+    }
+
+    public List<Follower> getFollowersByDB() {
+        List<Follower> list = new ArrayList<Follower>();
+        return list;
+    }
+
+    public List<Follower> getDeleteFollowers() {
+        List<Follower> followersByTumblrApi = getFollowersByTumblrApi();
+        List<Follower> followersByDB = getFollowersByDB();
+        List<Follower> deleteFollowers = followersByDB;
+        deleteFollowers.removeAll(followersByTumblrApi);
+        return deleteFollowers;
+    }
+
+
+
+    /*public List<FollowerInMainList> getMainList() {
+        List<FollowerInMainList> list = new ArrayList<FollowerInMainList>();
+        ArrayList<Follower> followersByTumblrAPI = get
+        return list;
+    }*/
 }

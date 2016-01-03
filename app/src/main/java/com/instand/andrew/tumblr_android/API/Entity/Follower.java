@@ -9,7 +9,16 @@ public class Follower {
     private String title;
     private boolean isFollow;
     private int id;
+    private boolean isDelete;
 
+    public Follower(String name, String title, String avatar, boolean isFollow, int id, boolean isDelete) {
+        this.name = name;
+        this.avatar = avatar;
+        this.title = title;
+        this.isFollow = isFollow;
+        this.id = id;
+        this.isDelete = isDelete;
+    }
 
     public Follower() {
     }
@@ -61,7 +70,17 @@ public class Follower {
         this.id = id;
     }
 
-    public String toString() {
-        return "name = " + name + "\n title = " + title + "\n avatar = " + avatar + "\n isFollow = " + isFollow;
+    public boolean isDelete() {
+        return isDelete;
     }
+
+    public void setIsDelete(boolean isDelete) {
+        this.isDelete = isDelete;
+    }
+
+    public String toString() {
+        return "name = " + name + "\n title = " + title + "\n avatar = " + avatar + "\n isFollow = " + isFollow + "\n isDelete = " + isDelete;
+    }
+
+
 }
