@@ -10,6 +10,7 @@ public class Follower {
     private boolean isFollow;
     private int id;
 
+
     public Follower() {
     }
 
