@@ -113,15 +113,39 @@ public class Followers_API {
         List<Follower> currentList = followingList;
         List<Follower> currentList1 = followingList;
         List<Follower> currentList3 = followerList;
-        currentList.retainAll(followerList);
-        currentList1.removeAll(followerList);
+        currentList = retainAll(currentList, followerList);
+        currentList1 = removeAll(currentList1, followerList);
         for (Follower follower : currentList) {
             follower.setIsFollow(true);
         }
-        currentList3.removeAll(followingList);
+        currentList3 = removeAll(currentList3, followingList);
         concatList.addAll(currentList);
         concatList.addAll(currentList1);
         concatList.addAll(currentList3);
         return concatList;
+    }
+
+    public List<Follower> removeAll(List<Follower> list1, List<Follower> list2) {
+        List<Follower> resultList = list1;
+        for (Follower currentList1 : resultList) {
+            for (Follower currentList2 : list2) {
+                if (currentList1.getName().equals(currentList2.getName())) {
+                    resultList.remove(currentList1);
+                }
+            }
+        }
+        return resultList;
+    }
+
+    public List<Follower> retainAll(List<Follower> list1, List<Follower> list2) {
+        List<Follower> resultList = new ArrayList<>();
+        for (Follower currentList2 : list2) {
+            for (Follower currentList1 : list1) {
+                if (currentList2.getName().equals(currentList1.getName())) {
+                    resultList.add(currentList1);
+                }
+            }
+        }
+        return resultList;
     }
 }
