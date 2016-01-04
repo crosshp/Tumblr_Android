@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.instand.andrew.tumblr_android.API.DataBase.DataBaseHelper;
 import com.instand.andrew.tumblr_android.API.Entity.Follower;
-import com.instand.andrew.tumblr_android.API.Entity.FollowerInMainList;
 import com.tumblr.jumblr.JumblrClient;
 import com.tumblr.jumblr.types.Blog;
 import com.tumblr.jumblr.types.User;
@@ -101,27 +100,22 @@ public class Followers_API {
         return deleteFollowers;
     }
 
-
     public List<Follower> getMainList() {
         List<Follower> followingList = getFollowing();
         List<Follower> followerList = getAllFollowersByDB();
-        return concatFollowerAndFollowers(followerList, followingList);
+        return concatFollowingsAndFollowers(followerList, followingList);
     }
 
-    public List<Follower> concatFollowerAndFollowers(List<Follower> followerList, List<Follower> followingList) {
+    public List<Follower> concatFollowingsAndFollowers(List<Follower> followerList, List<Follower> followingList) {
         List<Follower> concatList = new ArrayList<>();
         List<Follower> currentList = followingList;
-        List<Follower> currentList1 = followingList;
-        List<Follower> currentList3 = followerList;
-        currentList = retainAll(currentList, followerList);
-        currentList1 = removeAll(currentList1, followerList);
         for (Follower follower : currentList) {
-            follower.setIsFollow(true);
+            if (follower.isFollow()) {
+                currentList.remove(follower);
+            }
         }
-        currentList3 = removeAll(currentList3, followingList);
         concatList.addAll(currentList);
-        concatList.addAll(currentList1);
-        concatList.addAll(currentList3);
+        concatList.addAll(followerList);
         return concatList;
     }
 
