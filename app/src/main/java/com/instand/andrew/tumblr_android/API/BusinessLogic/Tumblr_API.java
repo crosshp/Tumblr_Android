@@ -49,19 +49,16 @@ public class Tumblr_API {
         return followers_api.getFollowing();
     }
 
-    public void getNewFollowers() {
+    public List<Follower> getNewFollowers() {
+        return followers_api.getNewFollowers();
     }
 
-
-    public void getUnfollowFollowers() {
+    public List<Follower> getUnfollowFollowers() {
+        return followers_api.getDeleteFollowers();
     }
 
 
     public void getRatingListByLikes() {
-    }
-
-
-    public void getRatingListByComments() {
     }
 
 

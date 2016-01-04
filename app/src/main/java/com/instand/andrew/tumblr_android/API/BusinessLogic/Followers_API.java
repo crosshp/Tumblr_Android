@@ -17,6 +17,9 @@ import java.util.List;
 public class Followers_API {
     JumblrClient client = null;
     List<Blog> followingBlogs = null;
+    List<Follower> followersByTumblrApi = null;
+    List<Follower> follwersByDB = null;
+    List<Follower> following = null;
     Context context = null;
     DataBaseHelper dataBase = new DataBaseHelper(context);
 
@@ -27,7 +30,12 @@ public class Followers_API {
     }
 
     public void initializeData() {
+
         followingBlogs = client.userFollowing();
+        followersByTumblrApi = getFollowersByTumblrApi();
+        follwersByDB = getFollowersByDB();
+        following = getFollowing();
+
     }
 
     public List<Follower> getFollowersByTumblrApi() {
@@ -77,10 +85,9 @@ public class Followers_API {
     }
 
     public List<Follower> getNewFollowers() {
-        List<Follower> followersByTumblrApi = getFollowersByTumblrApi();
-        List<Follower> followersByDB = getFollowersByDB();
-        List<Follower> newFollowers = followersByTumblrApi;
-        newFollowers.removeAll(followersByTumblrApi);
+        List<Follower> followersByDB = this.follwersByDB;
+        List<Follower> newFollowers = this.followersByTumblrApi;
+        newFollowers.removeAll(followersByDB);
         return newFollowers;
     }
 
@@ -93,16 +100,16 @@ public class Followers_API {
     }
 
     public List<Follower> getDeleteFollowers() {
-        List<Follower> followersByTumblrApi = getFollowersByTumblrApi();
-        List<Follower> followersByDB = getFollowersByDB();
+        List<Follower> followersByTumblrApi = this.followersByTumblrApi;
+        List<Follower> followersByDB = this.follwersByDB;
         List<Follower> deleteFollowers = followersByDB;
         deleteFollowers.removeAll(followersByTumblrApi);
         return deleteFollowers;
     }
 
     public List<Follower> getMainList() {
-        List<Follower> followingList = getFollowing();
-        List<Follower> followerList = getAllFollowersByDB();
+        List<Follower> followingList = this.following;
+        List<Follower> followerList = this.follwersByDB;
         return concatFollowingsAndFollowers(followerList, followingList);
     }
 
