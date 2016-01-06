@@ -47,8 +47,6 @@ public class DataBaseHelper extends SQLiteOpenHelper implements IDataBase {
     @Override
     public void addFollower(Follower follower) {
         SQLiteDatabase db = this.getWritableDatabase();
-        /*String query = "DROP TABLE IF EXISTS "+TABLE_FOLLOWER;
-        db.execSQL(query);*/
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME, follower.getName());
         values.put(COLUMN_AVATAR, follower.getAvatar());

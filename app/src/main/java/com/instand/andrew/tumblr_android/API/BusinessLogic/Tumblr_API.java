@@ -3,6 +3,7 @@ package com.instand.andrew.tumblr_android.API.BusinessLogic;
 import android.content.Context;
 
 import com.instand.andrew.tumblr_android.API.Entity.Follower;
+import com.instand.andrew.tumblr_android.API.Entity.Post;
 import com.tumblr.jumblr.JumblrClient;
 import com.tumblr.jumblr.types.Blog;
 import com.tumblr.jumblr.types.User;
@@ -18,13 +19,15 @@ public class Tumblr_API {
     private String token2 = null;
     private Context context = null;
     Followers_API followers_api = null;
+    Posts_API posts_api = null;
 
     public Tumblr_API(String token1, String token2, Context context) {
         this.token1 = token1;
         this.token2 = token2;
         this.context = context;
         initializeClient();
-        followers_api = new Followers_API(client, context);
+       // followers_api = new Followers_API(client, context);
+        posts_api = new Posts_API(client, context);
 
     }
 
@@ -57,6 +60,9 @@ public class Tumblr_API {
         return followers_api.getDeleteFollowers();
     }
 
+    public List<Post> getPostsByTumblrAPI() {
+        return posts_api.getPostsByTumblrAPI();
+    }
 
     public void getRatingListByLikes() {
     }
