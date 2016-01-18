@@ -4,12 +4,16 @@ import android.content.Context;
 
 import com.instand.andrew.tumblr_android.API.Entity.Follower;
 import com.instand.andrew.tumblr_android.API.Entity.Post;
+import com.instand.andrew.tumblr_android.Activity.StaticCard;
 import com.tumblr.jumblr.JumblrClient;
 import com.tumblr.jumblr.types.Blog;
+import com.tumblr.jumblr.types.Note;
 import com.tumblr.jumblr.types.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Andrew on 23.12.2015.
@@ -26,7 +30,7 @@ public class Tumblr_API {
         this.token2 = token2;
         this.context = context;
         initializeClient();
-       // followers_api = new Followers_API(client, context);
+        // followers_api = new Followers_API(client, context);
         posts_api = new Posts_API(client, context);
 
     }
@@ -64,9 +68,35 @@ public class Tumblr_API {
         return posts_api.getPostsByTumblrAPI();
     }
 
-    public void getRatingListByLikes() {
+    public Integer getFollowersCount() {
+        return client.blogInfo(client.user().getName()).getFollowersCount();
     }
 
+    public Integer getFollowingCount() {
+        return client.user().getFollowingCount();
+    }
+
+    public String getUserAvatar() {
+        return posts_api.getUrlAvatar();
+    }
+
+    public ArrayList<StaticCard> getStaticCards(){
+        User user = client.user();
+        Blog blog = client.blogInfo(user.getName());
+        ArrayList<StaticCard> staticCards = new ArrayList<>();
+        StaticCard staticCard = new StaticCard();
+        staticCard.setKey("Likes");
+        staticCard.setValue(String.valueOf(user.getLikeCount()));
+        staticCards.add(staticCard);
+        StaticCard staticCard1 = new StaticCard();
+        staticCard.setKey("Posts");
+        staticCard.setValue(String.valueOf(blog.getPostCount()));
+        staticCards.add(staticCard1);
+        return staticCards;
+    }
+
+    public void getRatingListByLikes() {
+    }
 
     public void getNumberOfLikes() {
     }

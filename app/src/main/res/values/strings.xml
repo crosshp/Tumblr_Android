@@ -2,5 +2,5 @@
     <string name="app_name">Tumblr_Android</string>
     <string name="consumer_key">B61NLyvSwHOtf2CRVLHkwXl0MTXlnJMb6hrn0OSzkjKCMazQp5</string>
     <string name="secret_key">P60AoZyKj6cZpQygtbL1U02zF0skZBP721MEnHTHUZ7foXk89v</string>
-
+    <string name="zero">0</string>
 </resources>

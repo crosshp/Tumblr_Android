@@ -1,12 +1,16 @@
 package com.instand.andrew.tumblr_android.API.BusinessLogic;
 
 import android.content.Context;
+import android.media.Image;
 
 import com.instand.andrew.tumblr_android.API.DataBase.DataBaseHelper;
 import com.instand.andrew.tumblr_android.API.Entity.Post;
 import com.tumblr.jumblr.JumblrClient;
 import com.tumblr.jumblr.types.User;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +44,15 @@ public class Posts_API {
         return resultList;
     }
 
+    public String getUrlAvatar() {
+        return client.blogAvatar(user.getName(), 64);
+    }
+
     public static String getLinkForLikes(String url) {
         return url.substring(0, url.lastIndexOf("/"));
+    }
+
+    public Integer getCountOfUserLikes() {
+        return user.getLikeCount();
     }
 }
