@@ -42,9 +42,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     Activity activity = this;
@@ -70,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     TextView followingValueTextView = null;
     TextView followerText = null;
     TextView followingText = null;
+    TextView titleText = null;
 
     TextView monthPostsTextView = null;
     TextView monthPostsValueTextView = null;
@@ -84,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
     TextView upCount = null;
     TextView downPersentCount = null;
     TextView downCount = null;
+    ActivityEntity activityEntity = null;
     boolean isAvatarInitialize = false;
 
     public boolean isAvatarUpdated(String oldURL, String newURL) {
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         initializeFonts();
         ActivityDAO dao = new ActivityDAO(activity);
-        ActivityEntity activityEntity = dao.getActivity();
+        activityEntity = dao.getActivity();
         isAvatarInitialize = initializeAvatar();
         if (activityEntity != null) {
             initializeActivityCount(activityEntity);
@@ -110,17 +110,13 @@ public class MainActivity extends AppCompatActivity {
             if (!hasConnection(this)) {
                 Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
             } else {
-                try {
-                    new CheckImageInitializationTask(activityEntity.getAvatarURL()).execute();
-                } catch (NullPointerException e) {
-                    new CheckImageInitializationTask("").execute();
-                }
+                new UpdateActivityInfoTask().execute();
                 if (!isUpdate()) {
                     System.out.println("Not update!");
                     saveDate();
+                    new UpdateActivityInfoTask().execute();
                 } else {
                     System.out.println("Is also update!!!");
-                    ;
                 }
             }
         }
@@ -135,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
             Bitmap bitmap = BitmapFactory.decodeStream(fis);
             avatarImageView.setImageBitmap(bitmap);
         } catch (FileNotFoundException e) {
-           e.printStackTrace();
+            e.printStackTrace();
             return false;
         } catch (IOException e) {
             e.printStackTrace();
@@ -245,8 +241,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class CheckImageInitializationTask extends AsyncTask<Void, Void, Void> {
+    private class CheckImageInitializationTask extends AsyncTask<Void, Void, Boolean> {
         private String oldURL;
+        String newURL = null;
 
         public CheckImageInitializationTask(String oldURL) {
             if (oldURL != null) {
@@ -255,15 +252,50 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
-            tumblr_api = new Tumblr_API("", "", activity);
-            String newURL = tumblr_api.getUserAvatar();
+        protected Boolean doInBackground(Void... params) {
+            newURL = tumblr_api.getUserAvatar();
             if (!isAvatarInitialize || !isAvatarUpdated(oldURL, newURL)) {
-                new DownloadImageTask(avatarImageView).execute(newURL,"orderAvatar");
+                return false;
             }
-            return null;
+            return true;
         }
 
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            if (!aBoolean) {
+                new DownloadImageTask(avatarImageView).execute(newURL, "orderAvatar");
+            }
+        }
+    }
+
+    private class UpdateActivityInfoTask extends AsyncTask<Void, Void, Map<String, String>> {
+        @Override
+        protected Map<String, String> doInBackground(Void... params) {
+            tumblr_api = new Tumblr_API("", "", activity);
+            return tumblr_api.getBaseInfo();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Map<String, String> map) {
+            followerCountTextView.setText(map.get("followers"));
+            followingCountTextView.setText(map.get("followings"));
+            notesValueTextView.setText(map.get("notes"));
+            postsValueTextView.setText(map.get("posts"));
+            toolbarText.setText(map.get("blogName"));
+            followerValueTextView.setText(map.get("followers"));
+            followingValueTextView.setText(map.get("followings"));
+            titleText.setText(map.get("slug"));
+            try {
+                new CheckImageInitializationTask(activityEntity.getAvatarURL()).execute();
+            } catch (NullPointerException e) {
+                new CheckImageInitializationTask("").execute();
+            }
+        }
     }
 
     public void initializeFonts() {
@@ -275,6 +307,7 @@ public class MainActivity extends AppCompatActivity {
         followerValueTextView = (TextView) findViewById(R.id.valueFollowersTextView);
         followingTextView = (TextView) findViewById(R.id.followingTextView);
         followingValueTextView = (TextView) findViewById(R.id.valueFollowingTextView);
+        titleText = (TextView) findViewById(R.id.slugName);
 
         monthPostsTextView = (TextView) findViewById(R.id.mounthPostsTextView);
         monthPostsValueTextView = (TextView) findViewById(R.id.mounthPostsValueTextView);
@@ -323,6 +356,7 @@ public class MainActivity extends AppCompatActivity {
         downPersentCount.setTypeface(typeface);
         downCount.setTypeface(typeface);
         toolbarText.setTypeface(typeface);
+        titleText.setTypeface(typeface);
     }
 
     public void initializeActivityCount(ActivityEntity activityEntity) {
@@ -331,10 +365,7 @@ public class MainActivity extends AppCompatActivity {
         notesValueTextView.setText(String.valueOf(activityEntity.getNotesCount()));
         followerValueTextView.setText(String.valueOf(activityEntity.getFollower()));
         followingValueTextView.setText(String.valueOf(activityEntity.getFollowing()));
-        monthPostsValueTextView.setText(String.valueOf(activityEntity.getPostsCountDay()));
-        monthNotesValueTextView.setText(String.valueOf(activityEntity.getNotesCountDay()));
-        monthFollowerValueTextView.setText(String.valueOf(activityEntity.getFollowersCountDay()));
-        monthFollowingValueTextView.setText(String.valueOf(activityEntity.getFollowingsCountDay()));
+        titleText.setText(activityEntity.getSlugName());
      /*   upPersentCount.setText(inizialization.getLambdaPersentCount());
         upCount.setText();
         downPersentCount.setText();

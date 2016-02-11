@@ -31,9 +31,10 @@ public class Tumblr_API {
         baseInfo.put("blogName", user.getName());
         baseInfo.put("avatar", orderBlog.avatar(64));
         baseInfo.put("followers", String.valueOf(orderBlog.getFollowersCount()));
-        baseInfo.put("following", String.valueOf(user.getFollowingCount()));
+        baseInfo.put("followings", String.valueOf(user.getFollowingCount()));
         baseInfo.put("posts", String.valueOf(orderBlog.getPostCount()));
         baseInfo.put("notes", String.valueOf(orderBlog.getLikeCount()));
+        baseInfo.put("slug",orderBlog.getTitle());
         return baseInfo;
     }
 
@@ -72,7 +73,7 @@ public class Tumblr_API {
         return client.blogAvatar(user.getName(), 64);
     }
 
- 
+
 
    /* public List<Follower> getFollowing() {
         return followers_api.getFollowing();

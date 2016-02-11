@@ -4,7 +4,7 @@
     <string name="secret_key">P60AoZyKj6cZpQygtbL1U02zF0skZBP721MEnHTHUZ7foXk89v</string>
     <string name="zero">0</string>
     <string name="postsText">Posts</string>
-    <string name="notesText">Notes</string>
+    <string name="notesText">Likes</string>
     <string name="FollowersText">Followers</string>
     <string name="FollowingText">Following</string>
     <string name="MonthText">Month</string>
@@ -12,5 +12,6 @@
     <string name="DayText">Day</string>
     <string name="zero_persent">0.0%</string>
     <string name="attr">static_image</string>
+    <string name="slug">Title</string>
 
 </resources>
