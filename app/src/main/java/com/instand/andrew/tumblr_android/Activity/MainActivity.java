@@ -42,7 +42,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -109,20 +108,19 @@ public class MainActivity extends AppCompatActivity {
         isAvatarInitialize = initializeAvatar();
         if (activityEntity != null) {
             initializeActivityCount(activityEntity);
+        }
+        if (!hasConnection(this)) {
+            Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
         } else {
-            if (!hasConnection(this)) {
-                Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
-            } else {
+            if (!isUpdate()) {
+                progressBar.setVisibility(View.VISIBLE);
+                saveDate();
                 new UpdateActivityInfoTask().execute();
-                if (!isUpdate()) {
-                    System.out.println("Not update!");
-                    saveDate();
-                    new UpdateActivityInfoTask().execute();
-                } else {
-                    System.out.println("Is also update!!!");
-                }
+            } else {
+                progressBar.setVisibility(View.INVISIBLE);
             }
         }
+
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -289,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -308,6 +306,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (NullPointerException e) {
                 new CheckImageInitializationTask("").execute();
             }
+            progressBar.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -381,6 +380,7 @@ public class MainActivity extends AppCompatActivity {
         followerCountTextView.setText(String.valueOf(activityEntity.getFollower()));
         followingCountTextView.setText(String.valueOf(activityEntity.getFollowing()));
         titleText.setText(activityEntity.getSlugName());
+        progressBar.setVisibility(View.INVISIBLE);
      /*   upPersentCount.setText(inizialization.getLambdaPersentCount());
         upCount.setText();
         downPersentCount.setText();
