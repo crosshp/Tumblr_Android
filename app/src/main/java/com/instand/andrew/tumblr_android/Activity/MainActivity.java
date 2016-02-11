@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (!hasConnection(this)) {
             Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
+            progressBar.setVisibility(View.INVISIBLE);
         } else {
             if (!isUpdate()) {
                 progressBar.setVisibility(View.VISIBLE);
