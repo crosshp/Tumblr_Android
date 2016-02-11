@@ -17,8 +17,7 @@ public class Tumblr_API {
     private String token1 = null;
     private String token2 = null;
     private Context context = null;
-    Followers_API followers_api = null;
-    Posts_API posts_api = null;
+    Blog orderBlog = null;
 
     public Tumblr_API(String token1, String token2, Context context) {
         this.token1 = token1;
@@ -27,15 +26,14 @@ public class Tumblr_API {
         initializeClient();
     }
 
-    public Map<String,String> getBaseInfo(){
-        Map<String,String> baseInfo = new HashMap<>();
-        Blog blog = client.blogInfo(user.getName());
-        baseInfo.put("blogName",user.getName());
-        baseInfo.put("avatar",blog.avatar(64));
-        baseInfo.put("followers", String.valueOf(blog.getFollowersCount()));
+    public Map<String, String> getBaseInfo() {
+        Map<String, String> baseInfo = new HashMap<>();
+        baseInfo.put("blogName", user.getName());
+        baseInfo.put("avatar", orderBlog.avatar(64));
+        baseInfo.put("followers", String.valueOf(orderBlog.getFollowersCount()));
         baseInfo.put("following", String.valueOf(user.getFollowingCount()));
-        baseInfo.put("posts", String.valueOf(blog.getPostCount()));
-        baseInfo.put("notes", String.valueOf(blog.getLikeCount()));
+        baseInfo.put("posts", String.valueOf(orderBlog.getPostCount()));
+        baseInfo.put("notes", String.valueOf(orderBlog.getLikeCount()));
         return baseInfo;
     }
 
@@ -61,14 +59,20 @@ public class Tumblr_API {
         token2 = "Ao7iY4TH3CERnFAqqQkx8lPyRoC43qXMTHIUYPe0qrNxnde3Nw";
         client.setToken(token1, token2);
         user = client.user();
+        orderBlog = client.blogInfo(user.getName());
     }
 
-   /* public List<Follower> getFollowers() {
-        return followers_api.getFollowersByTumblrApi();
-    }*/
-   public String getName(){
+    /* public List<Follower> getFollowers() {
+         return followers_api.getFollowersByTumblrApi();
+     }*/
+    public String getName() {
         return user.getName();
     }
+    public String getUserAvatar() {
+        return client.blogAvatar(user.getName(), 64);
+    }
+
+ 
 
    /* public List<Follower> getFollowing() {
         return followers_api.getFollowing();
@@ -83,21 +87,7 @@ public class Tumblr_API {
     }*/
 
 
-    public Integer getFollowersCount() {
-        return client.blogInfo(user.getName()).getFollowersCount();
-    }
 
-    public Integer getFollowingCount() {
-        return client.user().getFollowingCount();
-    }
-
-    public String getUserAvatar() {
-        return posts_api.getUrlAvatar();
-    }
-
-    public List<com.tumblr.jumblr.types.Post> getPostsWithOffset(int offset){
-        return posts_api.getPostsWithOffset(offset);
-    }
 
 
     public void getRatingListByLikes() {

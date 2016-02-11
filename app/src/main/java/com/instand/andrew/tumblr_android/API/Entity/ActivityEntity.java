@@ -9,7 +9,7 @@ public class ActivityEntity extends RealmObject {
     private Integer follower;
     private Integer following;
     private String blogName;
-    private String avatarURI;
+    private String avatarURL;
 
     private Integer notesCount;
     private Integer notesCountWeek;
@@ -29,7 +29,7 @@ public class ActivityEntity extends RealmObject {
         follower = 0;
         following = 0;
         blogName = "Tumblr Statistics";
-        avatarURI = null;
+        avatarURL = null;
         notesCount = 0;
         notesCountWeek = 0;
         notesCountDay = 0;
@@ -66,12 +66,12 @@ public class ActivityEntity extends RealmObject {
         this.blogName = blogName;
     }
 
-    public String getAvatarURI() {
-        return avatarURI;
+    public String getAvatarURL() {
+        return avatarURL;
     }
 
-    public void setAvatarURI(String avatarURI) {
-        this.avatarURI = avatarURI;
+    public void setAvatarURL(String avatarURL) {
+        this.avatarURL = avatarURL;
     }
 
     public Integer getNotesCount() {

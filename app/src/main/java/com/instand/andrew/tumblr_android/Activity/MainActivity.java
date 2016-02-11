@@ -43,6 +43,9 @@ import java.net.URL;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+
 public class MainActivity extends AppCompatActivity {
     Activity activity = this;
     Toolbar toolbar = null;
@@ -81,26 +84,37 @@ public class MainActivity extends AppCompatActivity {
     TextView upCount = null;
     TextView downPersentCount = null;
     TextView downCount = null;
+    boolean isAvatarInitialize = false;
 
+    public boolean isAvatarUpdated(String oldURL, String newURL) {
+        return oldURL.equals(newURL);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarText = (TextView) findViewById(R.id.toolbar_title);
         avatarImageView = (ImageView) findViewById(R.id.avatarImageView);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         setSupportActionBar(toolbar);
         initializeFonts();
         ActivityDAO dao = new ActivityDAO(activity);
         ActivityEntity activityEntity = dao.getActivity();
+        isAvatarInitialize = initializeAvatar();
         if (activityEntity != null) {
             initializeActivityCount(activityEntity);
         } else {
             if (!hasConnection(this)) {
                 Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
             } else {
-          //      CheckBitMap
+                try {
+                    new CheckImageInitializationTask(activityEntity.getAvatarURL()).execute();
+                } catch (NullPointerException e) {
+                    new CheckImageInitializationTask("").execute();
+                }
                 if (!isUpdate()) {
                     System.out.println("Not update!");
                     saveDate();
@@ -111,18 +125,23 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    public void initializeAvatar(){
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/TumblrStat";
-        File file = new File(path+"/name" + ".png");
-        try(FileInputStream fis = new FileInputStream(file)) {
-            Bitmap bitmap = BitmapFactory.decodeStream(fis);
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    public boolean initializeAvatar() {
+        System.out.println("NOT  DOWNLOAD!!!");
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/TumblrStat";
+        File file = new File(path + "/orderAvatar" + ".png");
+        try (FileInputStream fis = new FileInputStream(file)) {
+            Bitmap bitmap = BitmapFactory.decodeStream(fis);
+            avatarImageView.setImageBitmap(bitmap);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+           e.printStackTrace();
+            return false;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     public Integer getDate() {
@@ -157,12 +176,19 @@ public class MainActivity extends AppCompatActivity {
         ImageView bmImage;
         String name = null;
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
         public DownloadImageTask(ImageView bmImage) {
             this.bmImage = bmImage;
 
         }
 
         protected Bitmap doInBackground(String... urls) {
+            System.out.println("DOWNLOAD!!!");
             String urldisplay = urls[0];
             Bitmap mIcon11 = null;
             try {
@@ -194,13 +220,12 @@ public class MainActivity extends AppCompatActivity {
             return output;
         }
 
-        @TargetApi(Build.VERSION_CODES.KITKAT)
         public void savePicture(Bitmap bitmap, String name) {
             String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/TumblrStat";
             File dir = new File(path);
             if (!dir.exists())
                 dir.mkdirs();
-            File file = new File(dir, "name" + ".png");
+            File file = new File(dir, name + ".png");
             try (FileOutputStream fOut = new FileOutputStream(file)) {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut);
                 fOut.flush();
@@ -220,6 +245,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private class CheckImageInitializationTask extends AsyncTask<Void, Void, Void> {
+        private String oldURL;
+
+        public CheckImageInitializationTask(String oldURL) {
+            if (oldURL != null) {
+                this.oldURL = oldURL;
+            } else this.oldURL = "";
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            tumblr_api = new Tumblr_API("", "", activity);
+            String newURL = tumblr_api.getUserAvatar();
+            if (!isAvatarInitialize || !isAvatarUpdated(oldURL, newURL)) {
+                new DownloadImageTask(avatarImageView).execute(newURL,"orderAvatar");
+            }
+            return null;
+        }
+
+    }
 
     public void initializeFonts() {
         postsTextView = (TextView) findViewById(R.id.postsTextView);

@@ -5,19 +5,24 @@ import android.content.Context;
 import com.instand.andrew.tumblr_android.API.Entity.ActivityEntity;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * Created by Andrew on 10.02.2016.
  */
 public class ActivityDAO {
     Context context = null;
+    Realm realm = null;
 
     public ActivityDAO(Context context) {
         this.context = context;
+        RealmConfiguration config = new RealmConfiguration.Builder(context).build();
+        Realm.setDefaultConfiguration(config);
+        Realm.deleteRealm(config);
+        realm = Realm.getInstance(config);
     }
 
     public void saveActivityInfo(ActivityEntity activity) {
-        Realm realm = Realm.getInstance(context);
         realm.beginTransaction();
         realm.clear(ActivityEntity.class);
         realm.copyToRealm(activity);
@@ -25,7 +30,6 @@ public class ActivityDAO {
     }
 
     public ActivityEntity getActivity() {
-        Realm realm = Realm.getInstance(context);
         ActivityEntity activityEntity = null;
         try {
             activityEntity = realm.allObjects(ActivityEntity.class).first();
