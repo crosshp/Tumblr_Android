@@ -1,21 +1,22 @@
 package com.instand.andrew.tumblr_android.API.Entity;
 
-import java.util.List;
+import io.realm.RealmList;
+import io.realm.RealmObject;
 
 /**
  * Created by Andrew on 06.01.2016.
  */
-public class Post {
+public class Post extends RealmObject {
     private String blogName;
     private String slug;
     private String date;
-    private List<String> tags;
+    private RealmList<Tag> tags;
     private String url;
 
     public Post() {
     }
 
-    public Post(String blogName, String slug, String date, List<String> tags, String url) {
+    public Post(String blogName, String slug, String date, RealmList<Tag> tags, String url) {
         this.blogName = blogName;
         this.slug = slug;
         this.date = date;
@@ -47,14 +48,6 @@ public class Post {
         this.date = date;
     }
 
-    public List<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<String> tags) {
-        this.tags = tags;
-    }
-
     public String getUrl() {
         return url;
     }
@@ -63,7 +56,15 @@ public class Post {
         this.url = url;
     }
 
-    public String toString() {
+    public RealmList<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(RealmList<Tag> tags) {
+        this.tags = tags;
+    }
+
+    /*public String toString() {
         String tags = "";
         if (this.tags.size() != 0) {
             for (String tag : this.tags) {
@@ -72,5 +73,5 @@ public class Post {
             tags = tags.substring(0, tags.length() - 1);
         }
         return "blogName =" + blogName + "\nslug = " + slug + "\ntags = " + tags + "\nurl = "+url+"\ndate = " + date + "\n";
-    }
+    }*/
 }

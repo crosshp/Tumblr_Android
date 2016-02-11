@@ -2,15 +2,10 @@ package com.instand.andrew.tumblr_android.API.BusinessLogic;
 
 import android.content.Context;
 
-import com.instand.andrew.tumblr_android.API.Entity.Follower;
-import com.instand.andrew.tumblr_android.API.Entity.Post;
-import com.instand.andrew.tumblr_android.Activity.StaticCard;
 import com.tumblr.jumblr.JumblrClient;
 import com.tumblr.jumblr.types.Blog;
-import com.tumblr.jumblr.types.Note;
 import com.tumblr.jumblr.types.User;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,14 +25,33 @@ public class Tumblr_API {
         this.token2 = token2;
         this.context = context;
         initializeClient();
-        // followers_api = new Followers_API(client, context);
-        posts_api = new Posts_API(client, context);
+    }
 
+    public Map<String,String> getBaseInfo(){
+        Map<String,String> baseInfo = new HashMap<>();
+        Blog blog = client.blogInfo(user.getName());
+        baseInfo.put("blogName",user.getName());
+        baseInfo.put("avatar",blog.avatar(64));
+        baseInfo.put("followers", String.valueOf(blog.getFollowersCount()));
+        baseInfo.put("following", String.valueOf(user.getFollowingCount()));
+        baseInfo.put("posts", String.valueOf(blog.getPostCount()));
+        baseInfo.put("notes", String.valueOf(blog.getLikeCount()));
+        return baseInfo;
     }
 
     String consumer_key = Auth.consumer_key;
     String secret_key = Auth.secret_key;
+
+    public JumblrClient getClient() {
+        return client;
+    }
+
+    public void setClient(JumblrClient client) {
+        this.client = client;
+    }
+
     JumblrClient client = null;
+    User user = null;
 
 
     public void initializeClient() {
@@ -46,30 +60,31 @@ public class Tumblr_API {
         token1 = "thVvLDO23IeLLfrLV1SZIMLVcU0Is3SL72599S6nzUABTwYwM4";
         token2 = "Ao7iY4TH3CERnFAqqQkx8lPyRoC43qXMTHIUYPe0qrNxnde3Nw";
         client.setToken(token1, token2);
+        user = client.user();
     }
 
-    public List<Follower> getFollowers() {
+   /* public List<Follower> getFollowers() {
         return followers_api.getFollowersByTumblrApi();
+    }*/
+   public String getName(){
+        return user.getName();
     }
 
-    public List<Follower> getFollowing() {
+   /* public List<Follower> getFollowing() {
         return followers_api.getFollowing();
-    }
+    }*/
 
-    public List<Follower> getNewFollowers() {
+   /* public List<Follower> getNewFollowers() {
         return followers_api.getNewFollowers();
-    }
+    }*/
 
-    public List<Follower> getUnfollowFollowers() {
+  /* public List<Follower> getUnfollowFollowers() {
         return followers_api.getDeleteFollowers();
-    }
+    }*/
 
-    public List<Post> getPostsByTumblrAPI() {
-        return posts_api.getPostsByTumblrAPI();
-    }
 
     public Integer getFollowersCount() {
-        return client.blogInfo(client.user().getName()).getFollowersCount();
+        return client.blogInfo(user.getName()).getFollowersCount();
     }
 
     public Integer getFollowingCount() {
@@ -80,20 +95,10 @@ public class Tumblr_API {
         return posts_api.getUrlAvatar();
     }
 
-    public ArrayList<StaticCard> getStaticCards(){
-        User user = client.user();
-        Blog blog = client.blogInfo(user.getName());
-        ArrayList<StaticCard> staticCards = new ArrayList<>();
-        StaticCard staticCard = new StaticCard();
-        staticCard.setKey("Likes");
-        staticCard.setValue(String.valueOf(user.getLikeCount()));
-        staticCards.add(staticCard);
-        StaticCard staticCard1 = new StaticCard();
-        staticCard.setKey("Posts");
-        staticCard.setValue(String.valueOf(blog.getPostCount()));
-        staticCards.add(staticCard1);
-        return staticCards;
+    public List<com.tumblr.jumblr.types.Post> getPostsWithOffset(int offset){
+        return posts_api.getPostsWithOffset(offset);
     }
+
 
     public void getRatingListByLikes() {
     }
