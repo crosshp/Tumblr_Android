@@ -18,7 +18,6 @@ public class ActivityDAO {
         this.context = context;
         RealmConfiguration config = new RealmConfiguration.Builder(context).build();
         Realm.setDefaultConfiguration(config);
-        Realm.deleteRealm(config);
         realm = Realm.getInstance(config);
     }
 
