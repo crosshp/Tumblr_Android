@@ -5,6 +5,7 @@ import android.content.Context;
 import com.instand.andrew.tumblr_android.API.Entity.StatisticDay;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
@@ -13,41 +14,55 @@ import io.realm.RealmResults;
  */
 public class DayStatisticDAO {
     Context context = null;
+    Realm realm = null;
 
     public DayStatisticDAO(Context context) {
         this.context = context;
+        RealmConfiguration config = new RealmConfiguration.Builder(context).build();
+        Realm.setDefaultConfiguration(config);
+        realm = Realm.getInstance(config);
     }
 
     public void saveDayStatistic(StatisticDay statisticDay) {
-        Realm realm = Realm.getInstance(context);
         realm.beginTransaction();
         realm.copyToRealm(statisticDay);
         realm.commitTransaction();
     }
+    public void deleteAllDayStatistic() {
+        realm.beginTransaction();
+        realm.clear(StatisticDay.class);
+        realm.commitTransaction();
+    }
 
     public RealmResults<StatisticDay> getAllDayStatistic() {
-        Realm realm = Realm.getInstance(context);
         realm.beginTransaction();
         RealmResults<StatisticDay> statisticDays = realm.allObjects(StatisticDay.class);
         realm.commitTransaction();
         return statisticDays;
     }
 
-    public RealmResults<StatisticDay> getDayStatisticByMonth(Integer month) {
-        Realm realm = Realm.getInstance(context);
+    public StatisticDay getDayStatisticByMonth(Integer month, Integer year) {
         RealmQuery query = realm.where(StatisticDay.class);
-        return query.equalTo("month", month).findAll();
+        StatisticDay statisticDay = null;
+        statisticDay = (StatisticDay) query.equalTo("month", month).equalTo("year", year).findFirst();
+        return statisticDay;
     }
 
-    public RealmResults<StatisticDay> getDayStatisticByWeek(Integer week) {
-        Realm realm = Realm.getInstance(context);
+    public StatisticDay getDayStatisticByWeek(Integer week, Integer year) {
         RealmQuery query = realm.where(StatisticDay.class);
-        return query.equalTo("weekOnTheYear", week).findAll();
+        StatisticDay statisticDay = null;
+        statisticDay = (StatisticDay) query.equalTo("weekOnTheYear", week).equalTo("year", year).findFirst();
+        return statisticDay;
     }
 
-    public StatisticDay getDayStatisticByDay(Integer day) {
-        Realm realm = Realm.getInstance(context);
+    public StatisticDay getDayStatisticByDay(Integer day, Integer year) {
         RealmQuery query = realm.where(StatisticDay.class);
-        return (StatisticDay) query.equalTo("dayOnTheYear", day).findAll().first();
+        StatisticDay statisticDay = null;
+        try {
+            statisticDay = (StatisticDay) query.lessThan("dayOnTheYear", day).equalTo("year", year).findAll().last();
+        } catch (Exception e) {
+            return statisticDay;
+        }
+        return statisticDay;
     }
 }

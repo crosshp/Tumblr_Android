@@ -13,6 +13,7 @@ public class StatisticDay extends RealmObject {
     private Integer dayOnTheYear;
     private Integer weekOnTheYear;
     private Integer month;
+    private Integer year;
 
     public Integer getNotesCount() {
         return notesCount;
@@ -68,5 +69,13 @@ public class StatisticDay extends RealmObject {
 
     public void setWeekOnTheYear(Integer weekOnTheYear) {
         this.weekOnTheYear = weekOnTheYear;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
     }
 }

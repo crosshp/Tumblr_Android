@@ -30,7 +30,9 @@ import android.widget.Toast;
 
 import com.instand.andrew.tumblr_android.API.BusinessLogic.Tumblr_API;
 import com.instand.andrew.tumblr_android.API.DataBase.ActivityDAO;
+import com.instand.andrew.tumblr_android.API.DataBase.DayStatisticDAO;
 import com.instand.andrew.tumblr_android.API.Entity.ActivityEntity;
+import com.instand.andrew.tumblr_android.API.Entity.StatisticDay;
 import com.instand.andrew.tumblr_android.R;
 
 import java.io.File;
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     TextView followerCountTextView = null;
     String DATE_PREFERENCE = "datePreference";
     ActivityDAO dao = null;
+    DayStatisticDAO dayStatisticDAO = null;
     // String fontPath = "CenturyGothic.ttf";
     String fontPath = "Context Reprise ThinExp SSi Normal.ttf";
     TextView toolbarText = null;
@@ -86,24 +89,58 @@ public class MainActivity extends AppCompatActivity {
     TextView downCount = null;
     ActivityEntity activityEntity = null;
     boolean isAvatarInitialize = false;
+    Integer CURRENT_DAY = null;
+    Integer CURRENT_MONTH = null;
+    Integer CURRENT_YEAR = null;
+    Integer CURRENT_WEEK = null;
 
 
     public boolean isAvatarUpdated(String oldURL, String newURL) {
         return oldURL.equals(newURL);
     }
 
+    public void testMonthYearDay() {
+        dayStatisticDAO.deleteAllDayStatistic();
+        int count = 0;
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 31; j++) {
+                count += j;
+                StatisticDay statisticDay = new StatisticDay();
+                statisticDay.setNotesCount(count);
+                statisticDay.setPostsCount(count);
+                statisticDay.setFollowersCount(count);
+                statisticDay.setFollowingsCount(count);
+                statisticDay.setDayOnTheYear(CURRENT_DAY+j);
+                statisticDay.setMonth(CURRENT_MONTH+i);
+                statisticDay.setWeekOnTheYear(CURRENT_WEEK+i);
+                statisticDay.setYear(CURRENT_YEAR);
+                dayStatisticDAO.saveDayStatistic(statisticDay);
+            }
+        }
+        for(StatisticDay statisticDay:dayStatisticDAO.getAllDayStatistic()){
+            System.out.println(statisticDay);
+        }
+        System.out.println("Ololo");
+        System.out.println(dayStatisticDAO.getDayStatisticByMonth(9,2016));
+        System.out.println(dayStatisticDAO.getDayStatisticByDay(69,2016));
+        System.out.println(dayStatisticDAO.getDayStatisticByWeek(13,2016));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        initializeCurrentDate();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarText = (TextView) findViewById(R.id.toolbar_title);
         avatarImageView = (ImageView) findViewById(R.id.avatarImageView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         setSupportActionBar(toolbar);
         initializeFonts();
+
         dao = new ActivityDAO(this);
+        dayStatisticDAO = new DayStatisticDAO(this);
+        testMonthYearDay();
         activityEntity = dao.getActivity();
         isAvatarInitialize = initializeAvatar();
         if (activityEntity != null) {
@@ -182,11 +219,9 @@ public class MainActivity extends AppCompatActivity {
 
         public DownloadImageTask(ImageView bmImage) {
             this.bmImage = bmImage;
-
         }
 
         protected Bitmap doInBackground(String... urls) {
-            System.out.println("DOWNLOAD!!!");
             String urldisplay = urls[0];
             Bitmap mIcon11 = null;
             try {
@@ -302,6 +337,7 @@ public class MainActivity extends AppCompatActivity {
             followingValueTextView.setText(String.valueOf(activityEntity.getFollowing()));
             titleText.setText(activityEntity.getSlugName());
             dao.saveActivityInfo(activityEntity);
+            dayStatisticDAO.saveDayStatistic(convertActivityEntity(activityEntity));
             try {
                 new CheckImageInitializationTask(activityEntity.getAvatarURL()).execute();
             } catch (NullPointerException e) {
@@ -309,6 +345,27 @@ public class MainActivity extends AppCompatActivity {
             }
             progressBar.setVisibility(View.INVISIBLE);
         }
+    }
+
+    public StatisticDay convertActivityEntity(ActivityEntity activityEntity) {
+        StatisticDay statisticDay = new StatisticDay();
+        statisticDay.setNotesCount(activityEntity.getNotesCount());
+        statisticDay.setPostsCount(activityEntity.getPostsCount());
+        statisticDay.setFollowersCount(activityEntity.getFollower());
+        statisticDay.setFollowingsCount(activityEntity.getFollowing());
+        statisticDay.setDayOnTheYear(CURRENT_DAY);
+        statisticDay.setMonth(CURRENT_MONTH);
+        statisticDay.setWeekOnTheYear(CURRENT_WEEK);
+        statisticDay.setYear(CURRENT_YEAR);
+        return statisticDay;
+    }
+
+    public void initializeCurrentDate() {
+        Calendar calendar = new GregorianCalendar();
+        CURRENT_DAY = calendar.get(Calendar.DAY_OF_YEAR);
+        CURRENT_MONTH = calendar.get(Calendar.MONTH);
+        CURRENT_YEAR = calendar.get(Calendar.YEAR);
+        CURRENT_WEEK = calendar.get(Calendar.WEEK_OF_YEAR);
     }
 
     public void initializeFonts() {
