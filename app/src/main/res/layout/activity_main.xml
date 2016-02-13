@@ -157,10 +157,10 @@
                 android:id="@+id/mounthNotesValueTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/mounthPostsValueTextView"
-                android:layout_alignRight="@+id/mounthNotesTextView"
                 android:layout_alignTop="@+id/mounthNotesTextView"
                 android:layout_marginLeft="10dp"
+                android:layout_toEndOf="@+id/mounthNotesTextView"
+                android:layout_toRightOf="@+id/mounthNotesTextView"
                 android:text="@string/zero"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -330,7 +330,7 @@
 
             <include
                 android:id="@+id/persentComponentFollowing"
-                layout="@layout/persent_component_down"
+                layout="@layout/persent_component_equal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/mounthFollowingValueTextView"

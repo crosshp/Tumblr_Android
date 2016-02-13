@@ -28,11 +28,6 @@ public class DayStatisticDAO {
         realm.copyToRealm(statisticDay);
         realm.commitTransaction();
     }
-    public void deleteAllDayStatistic() {
-        realm.beginTransaction();
-        realm.clear(StatisticDay.class);
-        realm.commitTransaction();
-    }
 
     public RealmResults<StatisticDay> getAllDayStatistic() {
         realm.beginTransaction();
@@ -43,25 +38,33 @@ public class DayStatisticDAO {
 
     public StatisticDay getDayStatisticByMonth(Integer month, Integer year) {
         RealmQuery query = realm.where(StatisticDay.class);
-        StatisticDay statisticDay = null;
-        statisticDay = (StatisticDay) query.equalTo("month", month).equalTo("year", year).findFirst();
+        StatisticDay statisticDay;
+        try {
+            statisticDay = (StatisticDay) query.equalTo("month", month).equalTo("year", year).findFirst();
+        } catch (Exception e) {
+            return null;
+        }
         return statisticDay;
     }
 
     public StatisticDay getDayStatisticByWeek(Integer week, Integer year) {
         RealmQuery query = realm.where(StatisticDay.class);
-        StatisticDay statisticDay = null;
-        statisticDay = (StatisticDay) query.equalTo("weekOnTheYear", week).equalTo("year", year).findFirst();
+        StatisticDay statisticDay;
+        try {
+            statisticDay = (StatisticDay) query.equalTo("weekOnTheYear", week).equalTo("year", year).findFirst();
+        } catch (Exception e) {
+            return null;
+        }
         return statisticDay;
     }
 
     public StatisticDay getDayStatisticByDay(Integer day, Integer year) {
         RealmQuery query = realm.where(StatisticDay.class);
-        StatisticDay statisticDay = null;
+        StatisticDay statisticDay;
         try {
             statisticDay = (StatisticDay) query.lessThan("dayOnTheYear", day).equalTo("year", year).findAll().last();
         } catch (Exception e) {
-            return statisticDay;
+            return null;
         }
         return statisticDay;
     }

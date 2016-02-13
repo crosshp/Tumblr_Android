@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     // String fontPath = "CenturyGothic.ttf";
     String fontPath = "Context Reprise ThinExp SSi Normal.ttf";
     TextView toolbarText = null;
-
+    boolean isMontInitialize = false;
 
     TextView postsTextView = null;
     TextView postsValueTextView = null;
@@ -100,30 +100,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void testMonthYearDay() {
-        dayStatisticDAO.deleteAllDayStatistic();
-        int count = 0;
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 31; j++) {
-                count += j;
-                StatisticDay statisticDay = new StatisticDay();
-                statisticDay.setNotesCount(count);
-                statisticDay.setPostsCount(count);
-                statisticDay.setFollowersCount(count);
-                statisticDay.setFollowingsCount(count);
-                statisticDay.setDayOnTheYear(CURRENT_DAY+j);
-                statisticDay.setMonth(CURRENT_MONTH+i);
-                statisticDay.setWeekOnTheYear(CURRENT_WEEK+i);
-                statisticDay.setYear(CURRENT_YEAR);
-                dayStatisticDAO.saveDayStatistic(statisticDay);
-            }
-        }
-        for(StatisticDay statisticDay:dayStatisticDAO.getAllDayStatistic()){
+        /*for (StatisticDay statisticDay : dayStatisticDAO.getAllDayStatistic()) {
             System.out.println(statisticDay);
-        }
+        }*/
         System.out.println("Ololo");
-        System.out.println(dayStatisticDAO.getDayStatisticByMonth(9,2016));
-        System.out.println(dayStatisticDAO.getDayStatisticByDay(69,2016));
-        System.out.println(dayStatisticDAO.getDayStatisticByWeek(13,2016));
+        System.out.println(dayStatisticDAO.getDayStatisticByMonth(9, 2016));
+        System.out.println(dayStatisticDAO.getDayStatisticByDay(69, 2016));
+        System.out.println(dayStatisticDAO.getDayStatisticByWeek(13, 2016));
+    }
+
+    public boolean isMonthInitialize() {
+        boolean result = false;
+        StatisticDay statisticDay = dayStatisticDAO.getDayStatisticByMonth(CURRENT_MONTH, CURRENT_YEAR);
+        if (statisticDay != null) {
+            monthFollowerValueTextView.setText(String.valueOf(statisticDay.getFollowersCount()));
+            monthFollowingValueTextView.setText(String.valueOf(statisticDay.getFollowingsCount()));
+            monthNotesValueTextView.setText(String.valueOf(statisticDay.getNotesCount()));
+            monthPostsValueTextView.setText(String.valueOf(statisticDay.getPostsCount()));
+            return true;
+        }
+        return result;
     }
 
     @Override
@@ -145,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
         isAvatarInitialize = initializeAvatar();
         if (activityEntity != null) {
             initializeActivityCount(activityEntity);
+            isMontInitialize = isMonthInitialize();
         }
         if (!hasConnection(this)) {
             Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
@@ -179,15 +176,21 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public Integer getDate() {
+    public Integer getDay() {
         SharedPreferences prefs = getSharedPreferences(DATE_PREFERENCE, MODE_PRIVATE);
         return prefs.getInt("day", 0);
+    }
+
+    public Integer getYear() {
+        SharedPreferences prefs = getSharedPreferences(DATE_PREFERENCE, MODE_PRIVATE);
+        return prefs.getInt("year", 0);
     }
 
     public boolean isUpdate() {
         Calendar calendar = new GregorianCalendar();
         Integer day = calendar.get(Calendar.DAY_OF_YEAR);
-        return day.equals(getDate());
+        Integer year = calendar.get(Calendar.YEAR);
+        return (day.equals(getDay()) && (year.equals(getYear())) && isMonthInitialize());
     }
 
     public static boolean hasConnection(final Context context) {
@@ -449,8 +452,10 @@ public class MainActivity extends AppCompatActivity {
     public void saveDate() {
         Calendar calendar = new GregorianCalendar();
         Integer day = calendar.get(Calendar.DAY_OF_YEAR);
+        Integer year = calendar.get(Calendar.YEAR);
         SharedPreferences.Editor editor = getSharedPreferences(DATE_PREFERENCE, MODE_PRIVATE).edit();
         editor.putInt("day", day);
+        editor.putInt("year", year);
         editor.commit();
     }
 
