@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/equalImage"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/abc_scrubber_control_off_mtrl_alpha"
+        android:src="@mipmap/ic_pause_white_36dp"
         android:contentDescription="@string/attr"
         android:layout_alignBottom="@+id/persentEqualCount"
         android:layout_toRightOf="@+id/persentEqualCount"

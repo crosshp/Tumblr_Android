@@ -1,345 +1,367 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/main_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/activity_color"
-    android:orientation="vertical">
-
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    android:layout_height="match_parent">
 
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/slugName"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/card_color" />
-
-    <TextView
-        android:id="@+id/followerCountTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/toolbar"
-        android:layout_marginTop="10dp"
-        android:layout_toLeftOf="@+id/avatarImageView"
-        android:layout_toStartOf="@+id/avatarImageView"
-        android:gravity="center"
-        android:text="@string/zero"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <ImageView
-        android:id="@+id/avatarImageView"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_alignTop="@+id/followingCountTextView"
-        android:layout_centerHorizontal="true" />
-
-
-    <TextView
-        android:id="@+id/followingCountTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/followerCountTextView"
-        android:layout_toEndOf="@+id/avatarImageView"
-        android:layout_toRightOf="@+id/avatarImageView"
-        android:gravity="center"
-        android:text="@string/zero"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/followersText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/avatarImageView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/followerCountTextView"
-        android:layout_toLeftOf="@+id/avatarImageView"
-        android:layout_toStartOf="@+id/avatarImageView"
-        android:gravity="center"
-        android:text="@string/FollowersText"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/followingText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/avatarImageView"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="false"
-        android:layout_below="@+id/followingCountTextView"
-        android:layout_toEndOf="@+id/avatarImageView"
-        android:layout_toRightOf="@+id/avatarImageView"
-        android:gravity="center"
-        android:text="@string/FollowingText"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/slugName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/avatarImageView"
-        android:layout_centerHorizontal="true"
-        android:ellipsize="end"
-        android:gravity="center"
-        android:lines="2"
-        android:maxLines="2"
-        android:text="@string/slug"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_toLeftOf="@+id/followingText"
-        android:layout_toStartOf="@+id/followingText" />
-
-    <ScrollView
-        android:id="@+id/scrollView"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/view"
-        android:layout_marginTop="10dp"
-        android:fillViewport="true">
+        android:background="@color/activity_color"
+        android:orientation="vertical">
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/slugName"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/card_color" />
+
+        <TextView
+            android:id="@+id/followerCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/toolbar"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@+id/avatarImageView"
+            android:layout_toStartOf="@+id/avatarImageView"
+            android:gravity="center"
+            android:text="@string/zero"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <ImageView
+            android:id="@+id/avatarImageView"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_alignTop="@+id/followingCountTextView"
+            android:layout_centerHorizontal="true" />
+
+
+        <TextView
+            android:id="@+id/followingCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/followerCountTextView"
+            android:layout_toEndOf="@+id/avatarImageView"
+            android:layout_toRightOf="@+id/avatarImageView"
+            android:gravity="center"
+            android:text="@string/zero"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/followersText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/avatarImageView"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/followerCountTextView"
+            android:layout_toLeftOf="@+id/avatarImageView"
+            android:layout_toStartOf="@+id/avatarImageView"
+            android:gravity="center"
+            android:text="@string/FollowersText"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/followingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/avatarImageView"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="false"
+            android:layout_below="@+id/followingCountTextView"
+            android:layout_toEndOf="@+id/avatarImageView"
+            android:layout_toRightOf="@+id/avatarImageView"
+            android:gravity="center"
+            android:text="@string/FollowingText"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/slugName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_below="@+id/avatarImageView"
+            android:layout_centerHorizontal="true"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="2"
+            android:maxLines="2"
+            android:text="@string/slug"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TextView
-                android:id="@+id/notesTextView"
-                android:layout_width="wrap_content"
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_toLeftOf="@+id/followingText"
+            android:layout_toStartOf="@+id/followingText" />
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/view"
+            android:layout_marginTop="10dp"
+            android:fillViewport="true">
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginLeft="5dp"
-                android:text="@string/notesText"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/valueNotesTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="10dp"
-                android:layout_toEndOf="@+id/notesTextView"
-                android:layout_toRightOf="@+id/notesTextView"
-                android:text="@string/zero"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                <TextView
+                    android:id="@+id/notesTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/notesText"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <TextView
-                android:id="@+id/mounthNotesTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/notesTextView"
-                android:layout_marginLeft="5dp"
-                android:text="@string/MonthText"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                <TextView
+                    android:id="@+id/valueNotesTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toEndOf="@+id/notesTextView"
+                    android:layout_toRightOf="@+id/notesTextView"
+                    android:text="@string/zero"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <TextView
-                android:id="@+id/mounthNotesValueTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/mounthNotesTextView"
-                android:layout_marginLeft="10dp"
-                android:layout_toEndOf="@+id/mounthNotesTextView"
-                android:layout_toRightOf="@+id/mounthNotesTextView"
-                android:text="@string/zero"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                <TextView
+                    android:id="@+id/mounthNotesTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/notesTextView"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/MonthText"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-
-            <TextView
-                android:id="@+id/postsTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/mounthNotesTextView"
-                android:layout_gravity="right"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/postsText"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:id="@+id/valuePostsTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/mounthPostsValueTextView"
-                android:layout_marginLeft="10dp"
-                android:layout_toEndOf="@+id/postsTextView"
-                android:layout_toRightOf="@+id/postsTextView"
-                android:text="@string/zero"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:id="@+id/mounthPostsTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/postsTextView"
-                android:layout_marginLeft="5dp"
-                android:text="@string/MonthText"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/mounthPostsValueTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/mounthPostsTextView"
-                android:layout_marginLeft="10dp"
-                android:layout_toEndOf="@+id/mounthPostsTextView"
-                android:layout_toRightOf="@+id/mounthPostsTextView"
-                android:text="@string/zero"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                <TextView
+                    android:id="@+id/mounthNotesValueTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/mounthNotesTextView"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toEndOf="@+id/mounthNotesTextView"
+                    android:layout_toRightOf="@+id/mounthNotesTextView"
+                    android:text="@string/zero"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
-            <TextView
-                android:id="@+id/followersTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/mounthPostsTextView"
-                android:layout_gravity="right"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/FollowersText"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                <TextView
+                    android:id="@+id/postsTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/mounthNotesTextView"
+                    android:layout_gravity="right"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/postsText"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <TextView
-                android:id="@+id/valueFollowersTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/followersTextView"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/followersTextView"
-                android:text="@string/zero"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                <TextView
+                    android:id="@+id/valuePostsTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/mounthPostsValueTextView"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toEndOf="@+id/postsTextView"
+                    android:layout_toRightOf="@+id/postsTextView"
+                    android:text="@string/zero"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <TextView
-                android:id="@+id/mounthFollowersTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/followersTextView"
-                android:layout_marginLeft="5dp"
-                android:text="@string/MonthText"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                <TextView
+                    android:id="@+id/mounthPostsTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/postsTextView"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/MonthText"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TextView
-                android:id="@+id/mounthFollowersValueTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/valueFollowersTextView"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/mounthFollowersTextView"
-                android:text="@string/zero"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                <TextView
+                    android:id="@+id/mounthPostsValueTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/mounthPostsTextView"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toEndOf="@+id/mounthPostsTextView"
+                    android:layout_toRightOf="@+id/mounthPostsTextView"
+                    android:text="@string/zero"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
-            <TextView
-                android:id="@+id/followingTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/mounthFollowersTextView"
-                android:layout_gravity="right"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/FollowingText"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                <TextView
+                    android:id="@+id/followersTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/mounthPostsTextView"
+                    android:layout_gravity="right"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/FollowersText"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <TextView
-                android:id="@+id/valueFollowingTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/followingTextView"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/followingTextView"
-                android:text="@string/zero"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                <TextView
+                    android:id="@+id/valueFollowersTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/followersTextView"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/followersTextView"
+                    android:text="@string/zero"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <TextView
-                android:id="@+id/mounthFollowingTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/followingTextView"
-                android:layout_marginLeft="5dp"
-                android:text="@string/MonthText"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                <TextView
+                    android:id="@+id/mounthFollowersTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/followersTextView"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/MonthText"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TextView
-                android:id="@+id/mounthFollowingValueTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/valueFollowingTextView"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/mounthFollowingTextView"
-                android:text="@string/zero"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                <TextView
+                    android:id="@+id/mounthFollowersValueTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/valueFollowersTextView"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/mounthFollowersTextView"
+                    android:text="@string/zero"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <include
-                android:id="@+id/persentComponentNotes"
-                layout="@layout/persent_component_down"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/mounthNotesTextView"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="11dp"
-                android:layout_marginRight="30dp" />
 
-            <include
-                android:id="@+id/persentComponentPosts"
-                layout="@layout/persent_component_up"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/mounthPostsValueTextView"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="11dp"
-                android:layout_marginRight="30dp" />
+                <TextView
+                    android:id="@+id/followingTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/mounthFollowersTextView"
+                    android:layout_gravity="right"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/FollowingText"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <include
-                android:id="@+id/persentComponentFollowers"
-                layout="@layout/persent_component_up"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/mounthFollowersValueTextView"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="11dp"
-                android:layout_marginRight="30dp" />
+                <TextView
+                    android:id="@+id/valueFollowingTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/followingTextView"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/followingTextView"
+                    android:text="@string/zero"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <include
-                android:id="@+id/persentComponentFollowing"
-                layout="@layout/persent_component_equal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/mounthFollowingValueTextView"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="11dp"
-                android:layout_marginRight="30dp" />
+                <TextView
+                    android:id="@+id/mounthFollowingTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/followingTextView"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/MonthText"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        </RelativeLayout>
-    </ScrollView>
+                <TextView
+                    android:id="@+id/mounthFollowingValueTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/valueFollowingTextView"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/mounthFollowingTextView"
+                    android:text="@string/zero"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-</RelativeLayout>
+                <include
+                    android:id="@+id/persentComponentNotes"
+                    layout="@layout/persent_component_down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/mounthNotesTextView"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="11dp"
+                    android:layout_marginRight="30dp" />
+
+                <include
+                    android:id="@+id/persentComponentPosts"
+                    layout="@layout/persent_component_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/mounthPostsValueTextView"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="11dp"
+                    android:layout_marginRight="30dp" />
+
+                <include
+                    android:id="@+id/persentComponentFollowers"
+                    layout="@layout/persent_component_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/mounthFollowersValueTextView"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="11dp"
+                    android:layout_marginRight="30dp" />
+
+                <include
+                    android:id="@+id/persentComponentFollowing"
+                    layout="@layout/persent_component_equal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/mounthFollowingValueTextView"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="11dp"
+                    android:layout_marginRight="30dp" />
+
+                <android.support.design.widget.FloatingActionButton
+                    app:layout_behavior="com.codepath.floatingactionbuttontest.ScrollAwareFABBehavior"
+                    android:id="@+id/myFAB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    app:elevation="4dp"
+                    app:layout_anchor="@id/main_content"
+                    app:layout_anchorGravity="bottom|right|end" />
+
+            </RelativeLayout>
+        </ScrollView>
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>
