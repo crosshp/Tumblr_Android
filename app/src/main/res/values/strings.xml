@@ -13,5 +13,10 @@
     <string name="zero_persent">0.0%</string>
     <string name="attr">static_image</string>
     <string name="slug">Title</string>
+    <string-array name="day_arrays">
+        <item>Day</item>
+        <item>Week</item>
+        <item>Month</item>
+    </string-array>
 
 </resources>

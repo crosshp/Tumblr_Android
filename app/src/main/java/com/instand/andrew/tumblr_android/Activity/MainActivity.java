@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -23,11 +24,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.instand.andrew.tumblr_android.API.BusinessLogic.Inizialization;
 import com.instand.andrew.tumblr_android.API.BusinessLogic.Tumblr_API;
 import com.instand.andrew.tumblr_android.API.DataBase.ActivityDAO;
 import com.instand.andrew.tumblr_android.API.DataBase.DayStatisticDAO;
@@ -52,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     Tumblr_API tumblr_api = null;
     ImageView avatarImageView = null;
     ProgressBar progressBar = null;
+    Spinner spinner = null;
     TextView followingCountTextView = null;
     TextView followerCountTextView = null;
     String DATE_PREFERENCE = "datePreference";
@@ -83,40 +88,61 @@ public class MainActivity extends AppCompatActivity {
     TextView monthFollowingTextView = null;
     TextView monthFollowingValueTextView = null;
 
-    TextView upPersentCount = null;
-    TextView upCount = null;
-    TextView downPersentCount = null;
-    TextView downCount = null;
+    TextView notesPersentTextView = null;
+    ImageView notesImage = null;
+    TextView notesLambdaTextView = null;
+
+    TextView postsPersentTextView = null;
+    ImageView postsImage = null;
+    TextView postsLambdaTextView = null;
+
+    TextView followerPersentTextView = null;
+    ImageView followerImage = null;
+    TextView followerLambdaTextView = null;
+
+    TextView followingPersentTextView = null;
+    ImageView followingImage = null;
+    TextView followingLambdaTextView = null;
+
     ActivityEntity activityEntity = null;
     boolean isAvatarInitialize = false;
     Integer CURRENT_DAY = null;
     Integer CURRENT_MONTH = null;
     Integer CURRENT_YEAR = null;
     Integer CURRENT_WEEK = null;
+    Inizialization inizialization = new Inizialization();
 
 
     public boolean isAvatarUpdated(String oldURL, String newURL) {
         return oldURL.equals(newURL);
     }
 
-    public void testMonthYearDay() {
-        /*for (StatisticDay statisticDay : dayStatisticDAO.getAllDayStatistic()) {
-            System.out.println(statisticDay);
-        }*/
-        System.out.println("Ololo");
-        System.out.println(dayStatisticDAO.getDayStatisticByMonth(9, 2016));
-        System.out.println(dayStatisticDAO.getDayStatisticByDay(69, 2016));
-        System.out.println(dayStatisticDAO.getDayStatisticByWeek(13, 2016));
-    }
-
     public boolean isMonthInitialize() {
         boolean result = false;
-        StatisticDay statisticDay = dayStatisticDAO.getDayStatisticByMonth(CURRENT_MONTH, CURRENT_YEAR);
+        StatisticDay statisticDay = dayStatisticDAO.getDayStatisticByDay(CURRENT_DAY, CURRENT_YEAR);
         if (statisticDay != null) {
-            monthFollowerValueTextView.setText(String.valueOf(statisticDay.getFollowersCount()));
-            monthFollowingValueTextView.setText(String.valueOf(statisticDay.getFollowingsCount()));
-            monthNotesValueTextView.setText(String.valueOf(statisticDay.getNotesCount()));
-            monthPostsValueTextView.setText(String.valueOf(statisticDay.getPostsCount()));
+            Integer followersCount = statisticDay.getFollowersCount();
+            Integer followingsCount = statisticDay.getFollowingsCount();
+            Integer notesCount = statisticDay.getNotesCount();
+            Integer postsCount = statisticDay.getPostsCount();
+            monthFollowerValueTextView.setText(String.valueOf(followersCount));
+            monthFollowingValueTextView.setText(String.valueOf(followingsCount));
+            monthNotesValueTextView.setText(String.valueOf(notesCount));
+            monthPostsValueTextView.setText(String.valueOf(postsCount));
+
+            Integer lambdaNotes = notesCount - activityEntity.getNotesCount();
+            Integer lambdaPosts = postsCount - activityEntity.getPostsCount();
+            Integer lambdaFollowers = followersCount - activityEntity.getFollower();
+            Integer lambdaFollowings = followingsCount - activityEntity.getFollowing();
+
+            setGraphicComponent(notesPersentTextView, notesImage, notesLambdaTextView,
+                    inizialization.getLambdaPersentCount(activityEntity.getNotesCount(), notesCount), lambdaNotes, (lambdaNotes >= 0));
+            setGraphicComponent(postsPersentTextView, postsImage, postsLambdaTextView,
+                    inizialization.getLambdaPersentCount(activityEntity.getPostsCount(), postsCount), lambdaPosts, (lambdaPosts >= 0));
+            setGraphicComponent(followerPersentTextView, followerImage, followerLambdaTextView,
+                    inizialization.getLambdaPersentCount(activityEntity.getFollower(), followersCount), lambdaFollowers, (lambdaFollowers >= 0));
+            setGraphicComponent(followingPersentTextView, followingImage, followingLambdaTextView,
+                    inizialization.getLambdaPersentCount(activityEntity.getFollowing(), followingsCount), lambdaFollowings, (lambdaFollowings >= 0));
             return true;
         }
         return result;
@@ -131,17 +157,30 @@ public class MainActivity extends AppCompatActivity {
         toolbarText = (TextView) findViewById(R.id.toolbar_title);
         avatarImageView = (ImageView) findViewById(R.id.avatarImageView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        spinner = (Spinner) findViewById(R.id.spinner);
+        spinner.setEnabled(false);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                updateGraphicByPeriod(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         setSupportActionBar(toolbar);
         initializeFonts();
 
         dao = new ActivityDAO(this);
         dayStatisticDAO = new DayStatisticDAO(this);
-        testMonthYearDay();
         activityEntity = dao.getActivity();
         isAvatarInitialize = initializeAvatar();
         if (activityEntity != null) {
             initializeActivityCount(activityEntity);
             isMontInitialize = isMonthInitialize();
+            spinner.setEnabled(true);
         }
         if (!hasConnection(this)) {
             Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
@@ -178,7 +217,8 @@ public class MainActivity extends AppCompatActivity {
 
     public Integer getDay() {
         SharedPreferences prefs = getSharedPreferences(DATE_PREFERENCE, MODE_PRIVATE);
-        return prefs.getInt("day", 0);
+     //   return prefs.getInt("day", 0);
+        return 5;
     }
 
     public Integer getYear() {
@@ -327,6 +367,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             progressBar.setVisibility(View.VISIBLE);
+            spinner.setEnabled(false);
         }
 
         @Override
@@ -341,6 +382,7 @@ public class MainActivity extends AppCompatActivity {
             titleText.setText(activityEntity.getSlugName());
             dao.saveActivityInfo(activityEntity);
             dayStatisticDAO.saveDayStatistic(convertActivityEntity(activityEntity));
+            spinner.setEnabled(true);
             try {
                 new CheckImageInitializationTask(activityEntity.getAvatarURL()).execute();
             } catch (NullPointerException e) {
@@ -362,6 +404,76 @@ public class MainActivity extends AppCompatActivity {
         statisticDay.setYear(CURRENT_YEAR);
         return statisticDay;
     }
+
+
+    public void updateGraphicByPeriod(Integer period) {
+        progressBar.setVisibility(View.VISIBLE);
+        ActivityEntity activityEntity = dao.getActivity();
+        String periodString = "";
+        switch (period) {
+            case 0: {
+                StatisticDay statisticDay = dayStatisticDAO.getDayStatisticByDay(CURRENT_DAY, CURRENT_YEAR);
+                updateGraphic(statisticDay, activityEntity);
+                periodString = "Day";
+                monthFollowerTextView.setText(periodString);
+                monthFollowingTextView.setText(periodString);
+                monthPostsTextView.setText(periodString);
+                monthNotesTextView.setText(periodString);
+                break;
+            }
+            case 1: {
+                StatisticDay statisticDay = dayStatisticDAO.getDayStatisticByWeek(CURRENT_WEEK, CURRENT_YEAR);
+                updateGraphic(statisticDay, activityEntity);
+                periodString = "Week";
+                monthFollowerTextView.setText(periodString);
+                monthFollowingTextView.setText(periodString);
+                monthPostsTextView.setText(periodString);
+                monthNotesTextView.setText(periodString);
+                break;
+            }
+            case 2: {
+                StatisticDay statisticDay = dayStatisticDAO.getDayStatisticByMonth(CURRENT_MONTH, CURRENT_YEAR);
+                updateGraphic(statisticDay, activityEntity);
+                periodString = "Month";
+                monthFollowerTextView.setText(periodString);
+                monthFollowingTextView.setText(periodString);
+                monthPostsTextView.setText(periodString);
+                monthNotesTextView.setText(periodString);
+                break;
+            }
+            default:
+                break;
+        }
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    public void updateGraphic(StatisticDay lessDay, ActivityEntity currentDay) {
+        if ((lessDay != null) && (currentDay != null)) {
+            Integer followersCount = currentDay.getFollower();
+            Integer followingsCount = currentDay.getFollowing();
+            Integer notesCount = currentDay.getNotesCount();
+            Integer postsCount = currentDay.getPostsCount();
+            monthFollowerValueTextView.setText(String.valueOf(lessDay.getFollowersCount()));
+            monthFollowingValueTextView.setText(String.valueOf(lessDay.getFollowingsCount()));
+            monthNotesValueTextView.setText(String.valueOf(lessDay.getNotesCount()));
+            monthPostsValueTextView.setText(String.valueOf(lessDay.getPostsCount()));
+
+            Integer lambdaNotes = notesCount - lessDay.getNotesCount();
+            Integer lambdaPosts = postsCount - lessDay.getPostsCount();
+            Integer lambdaFollowers = followersCount - lessDay.getFollowersCount();
+            Integer lambdaFollowings = followingsCount - lessDay.getFollowingsCount();
+
+            setGraphicComponent(notesPersentTextView, notesImage, notesLambdaTextView,
+                    inizialization.getLambdaPersentCount(lessDay.getNotesCount(), notesCount), lambdaNotes, (lambdaNotes >= 0));
+            setGraphicComponent(postsPersentTextView, postsImage, postsLambdaTextView,
+                    inizialization.getLambdaPersentCount(lessDay.getPostsCount(), postsCount), lambdaPosts, (lambdaPosts >= 0));
+            setGraphicComponent(followerPersentTextView, followerImage, followerLambdaTextView,
+                    inizialization.getLambdaPersentCount(lessDay.getFollowersCount(), followersCount), lambdaFollowers, (lambdaFollowers >= 0));
+            setGraphicComponent(followingPersentTextView, followingImage, followingLambdaTextView,
+                    inizialization.getLambdaPersentCount(lessDay.getFollowingsCount(), followingsCount), lambdaFollowings, (lambdaFollowings >= 0));
+        }
+    }
+
 
     public void initializeCurrentDate() {
         Calendar calendar = new GregorianCalendar();
@@ -396,10 +508,22 @@ public class MainActivity extends AppCompatActivity {
         followerText = (TextView) findViewById(R.id.followersText);
         followingText = (TextView) findViewById(R.id.followingText);
 
-        upPersentCount = (TextView) findViewById(R.id.persentUpCount);
-        upCount = (TextView) findViewById(R.id.lambdaUpCount);
-        downPersentCount = (TextView) findViewById(R.id.persentDownCount);
-        downCount = (TextView) findViewById(R.id.lambdaDownCount);
+        notesPersentTextView = (TextView) findViewById(R.id.persentNotesCount);
+        notesImage = (ImageView) findViewById(R.id.notesImage);
+        notesLambdaTextView = (TextView) findViewById(R.id.lambdaNotesCount);
+
+        postsPersentTextView = (TextView) findViewById(R.id.persentPostsCount);
+        postsImage = (ImageView) findViewById(R.id.postsImage);
+        postsLambdaTextView = (TextView) findViewById(R.id.lambdaPostsCount);
+
+        followerPersentTextView = (TextView) findViewById(R.id.persentFollowerCount);
+        followerImage = (ImageView) findViewById(R.id.followerImage);
+        followerLambdaTextView = (TextView) findViewById(R.id.lambdaFollowersCount);
+
+        followingPersentTextView = (TextView) findViewById(R.id.persentFollowingCount);
+        followingImage = (ImageView) findViewById(R.id.followingImage);
+        followingLambdaTextView = (TextView) findViewById(R.id.lambdaFollowingCount);
+
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), fontPath);
         followingCountTextView.setTypeface(typeface);
@@ -424,10 +548,19 @@ public class MainActivity extends AppCompatActivity {
         monthFollowerValueTextView.setTypeface(typeface);
         monthFollowingTextView.setTypeface(typeface);
         monthFollowingValueTextView.setTypeface(typeface);
-        upPersentCount.setTypeface(typeface);
-        upCount.setTypeface(typeface);
-        downPersentCount.setTypeface(typeface);
-        downCount.setTypeface(typeface);
+
+        notesPersentTextView.setTypeface(typeface);
+        notesLambdaTextView.setTypeface(typeface);
+
+        postsPersentTextView.setTypeface(typeface);
+        postsLambdaTextView.setTypeface(typeface);
+
+        followerPersentTextView.setTypeface(typeface);
+        followerLambdaTextView.setTypeface(typeface);
+
+        followingPersentTextView.setTypeface(typeface);
+        followingLambdaTextView.setTypeface(typeface);
+
         toolbarText.setTypeface(typeface);
         titleText.setTypeface(typeface);
     }
@@ -442,11 +575,6 @@ public class MainActivity extends AppCompatActivity {
         followingCountTextView.setText(String.valueOf(activityEntity.getFollowing()));
         titleText.setText(activityEntity.getSlugName());
         progressBar.setVisibility(View.INVISIBLE);
-     /*   upPersentCount.setText(inizialization.getLambdaPersentCount());
-        upCount.setText();
-        downPersentCount.setText();
-        downCount.setText();*/
-
     }
 
     public void saveDate() {
@@ -459,6 +587,19 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
     }
 
+    public void setGraphicComponent(TextView persentTextView, ImageView imageView, TextView countTextView, String persent, Integer count, boolean isUp) {
+        countTextView.setText(String.valueOf(count));
+        persentTextView.setText(persent);
+        if (isUp) {
+            countTextView.setTextColor(getResources().getColor(android.R.color.holo_green_light));
+            persentTextView.setTextColor(getResources().getColor(android.R.color.holo_green_light));
+            imageView.setImageResource(R.mipmap.white_up_36dp);
+        } else {
+            countTextView.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+            persentTextView.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+            imageView.setImageResource(R.mipmap.white_down_36dp);
+        }
+    }
   /*  public void getAllFollowers() {
         JumblrClient client = tumblr_api.getClient();
         int countOfPosts = client.blogInfo("moan-s.tumblr.com").getPostCount();

@@ -17,11 +17,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/upImage"
         android:layout_gravity="center_horizontal"
-        android:src="@mipmap/white_up_36dp"
+
         android:contentDescription="@string/attr"
         android:layout_alignBottom="@+id/persentUpCount"
         android:layout_toRightOf="@+id/persentUpCount"
-        android:layout_toEndOf="@+id/persentUpCount" />
+        android:layout_toEndOf="@+id/persentUpCount"
+        android:src="@mipmap/white_up_36dp" />
 
     <TextView
         android:layout_width="wrap_content"

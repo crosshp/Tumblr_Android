@@ -29,10 +29,11 @@ public class ActivityDAO {
     }
 
     public ActivityEntity getActivity() {
-        ActivityEntity activityEntity = null;
+        ActivityEntity activityEntity;
         try {
-            activityEntity = realm.allObjects(ActivityEntity.class).first();
+            activityEntity = realm.allObjects(ActivityEntity.class).last();
         } catch (Exception e) {
+            return null;
         }
         return activityEntity;
     }

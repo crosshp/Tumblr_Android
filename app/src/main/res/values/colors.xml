@@ -8,13 +8,15 @@
     <color name="card_color">#424242</color>
 
     Material Design
-    <color name="primary_dark">#512DA8</color>
+    <color name="primary_dark">#3E50B4</color>
     <color name="primary_light">#D1C4E9</color>
-    <color name="accent">#FF4081</color>
+    <color name="accent">#FF3F80</color>
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#727272</color>
     <color name="icons">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
+
 
     Toolbar Selector
     <color name="toolbar_title">#ffffff</color>
@@ -22,5 +24,7 @@
     <color name="toolbar_state_focused">#ffffff</color>
     <color name="toolbar_state_pressed">#ffffff</color>
     <color name="toolbar_tabs_underline">#E040FB</color>
+    <color name="button_blue">#2196F3</color>
+    <color name="button_blue_pressed">#1976D2</color>
 
 </resources>
